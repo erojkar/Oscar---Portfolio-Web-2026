@@ -1207,6 +1207,12 @@ img{
     margin-left:0;
     text-align:center;
   }
+  @media (max-width:640px){
+  .hero-name-logo{
+    width:min(100%, 330px);
+    margin:0 auto 18px;
+  }
+}
 }
 /* ============================= */
 /* FELINA LINK */
@@ -1291,6 +1297,63 @@ html{
   .header-instagram,
   .eye-link.header-instagram{
     display:none !important;
+  }
+}
+/* ============================= */
+/* LOGO GRANDE HERO — SIN TOCAR HEADER */
+/* ============================= */
+
+.hero-name-logo{
+  display:block;
+  width:min(100%, 410px);
+  max-width:410px;
+  height:auto;
+  margin:0 0 18px;
+}
+
+/* ============================= */
+/* HEADER MOBILE — ESTRUCTURA ORIGINAL */
+/* ============================= */
+
+@media (max-width:640px){
+  .nav-wrap{
+    height:auto;
+    grid-template-columns:1fr;
+    padding:12px 18px;
+    text-align:center;
+  }
+
+  .logo{
+    justify-self:center;
+    width:84px;
+    height:auto;
+  }
+
+  .logo img{
+    width:78px;
+    max-width:78px;
+    height:auto;
+    display:block;
+  }
+
+  .main-nav{
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:18px;
+    margin:6px 0;
+  }
+
+  .header-instagram,
+  .eye-link.header-instagram{
+    display:none !important;
+  }
+
+  .hero-name-logo{
+    width:min(100%, 330px);
+    max-width:330px;
+    margin:0 0 18px;
   }
 }
 
