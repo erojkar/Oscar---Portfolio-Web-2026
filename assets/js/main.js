@@ -68,3 +68,41 @@ document.addEventListener('keydown', (event) => {
     closeModal();
   }
 });
+/* ============================= */
+/* DROPDOWN WORK */
+/* ============================= */
+
+const navDropdown = document.querySelector('.nav-dropdown');
+const navDropdownTrigger = document.querySelector('.nav-dropdown-trigger');
+const navDropdownLinks = document.querySelectorAll('.nav-dropdown-menu a');
+
+/* Mobile: abrir/cerrar al clicar Work */
+navDropdownTrigger?.addEventListener('click', () => {
+  if (window.innerWidth <= 640) {
+    const isOpen = navDropdown.classList.toggle('open');
+    navDropdownTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+});
+
+/* Al clicar una opción: cerrar menú */
+navDropdownLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    navDropdown?.classList.add('force-close');
+    navDropdown?.classList.remove('open');
+    navDropdownTrigger?.setAttribute('aria-expanded', 'false');
+    navDropdownTrigger?.blur();
+  });
+});
+
+/* En desktop: no volver a abrir hasta que el ratón salga del bloque Work */
+navDropdown?.addEventListener('mouseleave', () => {
+  navDropdown.classList.remove('force-close');
+});
+
+/* En mobile: si cambia el tamaño de pantalla, reset */
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 640) {
+    navDropdown?.classList.remove('open');
+    navDropdownTrigger?.setAttribute('aria-expanded', 'false');
+  }
+});

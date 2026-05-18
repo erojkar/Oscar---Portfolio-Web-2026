@@ -1376,3 +1376,215 @@ html{
   mix-blend-mode:multiply;
   filter:contrast(1.15);
 }
+/* ============================= */
+/* NAV DROPDOWN WORK */
+/* ============================= */
+
+.nav-dropdown{
+  position:relative;
+  display:flex;
+  align-items:center;
+  height:70px;
+}
+
+.nav-dropdown-trigger{
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  height:70px;
+}
+
+.nav-dropdown-menu{
+  position:absolute;
+  top:100%;
+  left:50%;
+  transform:translateX(-50%) translateY(0);
+
+  min-width:210px;
+  padding:12px 0;
+
+  background:#ffffff;
+  border:2px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+
+  display:flex;
+  flex-direction:column;
+  gap:0;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    opacity .18s ease,
+    visibility .18s ease;
+
+  z-index:80;
+}
+
+/* Zona invisible que une Work con el menú */
+.nav-dropdown-menu::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:-14px;
+  height:14px;
+  background:transparent;
+}
+
+.nav-dropdown-menu a{
+  display:block;
+  padding:10px 16px 8px;
+
+  font-family:var(--display);
+  font-size:13px;
+  line-height:1;
+  text-align:left;
+  white-space:nowrap;
+
+  color:var(--ink);
+  text-decoration:none;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+
+.nav-dropdown-menu a:hover{
+  background:var(--accent);
+  color:#fff;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+/* Flecha */
+.nav-dropdown-trigger::after{
+  content:"";
+  display:inline-block;
+  width:0;
+  height:0;
+  margin-left:7px;
+  transform:translateY(-2px);
+
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-top:5px solid currentColor;
+}
+
+/* MOBILE */
+@media (max-width:640px){
+  .nav-dropdown{
+    width:auto;
+    height:auto;
+    justify-content:center;
+    flex-direction:column;
+  }
+
+  .nav-dropdown-trigger{
+    height:auto;
+  }
+
+  .nav-dropdown-menu{
+    position:static;
+    transform:none;
+
+    width:100%;
+    min-width:0;
+    margin-top:8px;
+    padding:8px 0;
+
+    border:0;
+    box-shadow:none;
+    background:transparent;
+
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+
+  .nav-dropdown-menu::before{
+    display:none;
+  }
+
+  .nav-dropdown-menu a{
+    text-align:center;
+    font-size:12px;
+    padding:4px 8px;
+  }
+
+  .nav-dropdown-menu a:hover{
+    background:transparent;
+    color:var(--accent);
+  }
+}
+/* ============================= */
+/* FIX ALINEACIÓN NAV DROPDOWN */
+/* ============================= */
+
+.main-nav{
+  align-items:center;
+}
+
+.nav-dropdown{
+  height:auto;
+  display:flex;
+  align-items:center;
+}
+
+.nav-dropdown-trigger{
+  height:auto;
+  display:inline-flex;
+  align-items:center;
+  line-height:1;
+}
+
+/* Mantiene el desplegable conectado sin bajar el texto Work */
+.nav-dropdown::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:100%;
+  height:18px;
+  background:transparent;
+}
+
+.nav-dropdown-menu{
+  top:calc(100% + 14px);
+}
+/* ============================= */
+/* MOBILE — OCULTAR DROPDOWN WORK */
+/* ============================= */
+
+@media (max-width:640px){
+  .nav-dropdown{
+    width:auto;
+    flex-direction:row;
+  }
+
+  .nav-dropdown-menu{
+    display:none !important;
+  }
+
+  .nav-dropdown-trigger::after{
+    display:none;
+  }
+}
+/* ============================= */
+/* DESKTOP — CERRAR DROPDOWN AL CLIC */
+/* ============================= */
+
+.nav-dropdown.force-close .nav-dropdown-menu{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
