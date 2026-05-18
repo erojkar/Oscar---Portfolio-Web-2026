@@ -18,7 +18,7 @@
   --line:#0b0b0b;
   --max:1500px;
   --header-real-h:74px;
-  --brand-strip-h:82px;
+  --brand-strip-h:clamp(56px, 8svh, 82px);
   --display:'ITC Serif Gothic Std Black','Arial Black',Impact,sans-serif;
   --body:Arial,Helvetica,sans-serif;
 }
@@ -34,6 +34,7 @@
 html{
   scroll-behavior:smooth;
   background:#070707;
+  overflow-y:scroll;
 }
 
 body{
@@ -67,7 +68,7 @@ img{
   position:sticky;
   top:0;
   z-index:50;
-  background:rgba(255,255,255,.96);
+  background:#ffffff;
   border-bottom:4px solid var(--ink);
   transition:transform .28s ease,box-shadow .28s ease;
 }
@@ -77,16 +78,18 @@ img{
 }
 
 .nav-wrap{
+  width:100%;
   max-width:var(--max);
   margin:0 auto;
   height:70px;
   padding:0 clamp(22px,4vw,68px);
   display:grid;
-  grid-template-columns:120px 1fr 70px;
+  grid-template-columns:120px minmax(0,1fr) 70px;
   align-items:center;
 }
 
 .logo{
+  justify-self:start;
   display:inline-flex;
   width:84px;
   align-items:center;
@@ -103,8 +106,10 @@ img{
 }
 
 .main-nav{
+  justify-self:center;
   display:flex;
   justify-content:center;
+  align-items:center;
   gap:56px;
 }
 
@@ -127,13 +132,16 @@ img{
   justify-self:end;
 }
 
-.header-instagram{
+.eye-link.header-instagram{
+  justify-self:end;
+  width:70px;
+  height:70px;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-end;
 }
 
-.header-instagram img{
+.eye-link.header-instagram img{
   width:34px;
   height:34px;
   display:block;
@@ -142,6 +150,127 @@ img{
 
 .header-instagram:hover{
   opacity:.75;
+}
+
+/* ============================= */
+/* NAV DROPDOWN WORK */
+/* ============================= */
+
+.nav-dropdown{
+  position:relative;
+  display:flex;
+  align-items:center;
+  height:auto;
+}
+
+.nav-dropdown-trigger{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+
+  display:inline-flex;
+  align-items:center;
+  height:auto;
+  line-height:1;
+
+  font-family:var(--display);
+  font-size:15px;
+  color:var(--ink);
+  text-decoration:none;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+
+.nav-dropdown-trigger:hover{
+  color:var(--accent);
+}
+
+/* Zona invisible que conecta Work con el menú sin bajar el texto */
+.nav-dropdown::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:100%;
+  height:18px;
+  background:transparent;
+}
+
+.nav-dropdown-menu{
+  position:absolute;
+  top:calc(100% + 14px);
+  left:50%;
+  transform:translateX(-50%);
+
+  min-width:210px;
+  padding:12px 0;
+
+  background:#ffffff;
+  border:2px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+
+  display:flex;
+  flex-direction:column;
+  gap:0;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    opacity .18s ease,
+    visibility .18s ease;
+
+  z-index:80;
+}
+
+.nav-dropdown-menu a{
+  display:block;
+  padding:10px 16px 8px;
+
+  font-family:var(--display);
+  font-size:13px;
+  line-height:1;
+  text-align:left;
+  white-space:nowrap;
+
+  color:var(--ink);
+  text-decoration:none;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+
+.nav-dropdown-menu a:hover{
+  background:var(--accent);
+  color:#fff;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.nav-dropdown.force-close .nav-dropdown-menu{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+/* Flecha */
+.nav-dropdown-trigger::after{
+  content:"";
+  display:inline-block;
+  width:0;
+  height:0;
+  margin-left:7px;
+  transform:translateY(-2px);
+
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-top:5px solid currentColor;
 }
 
 /* ============================= */
@@ -160,24 +289,30 @@ img{
 
 .index-screen{
   height:calc(100svh - var(--header-real-h));
-  min-height:640px;
-  display:flex;
-  flex-direction:column;
+  min-height:560px;
+  display:grid;
+  grid-template-rows:minmax(0, 1fr) var(--brand-strip-h);
   overflow:hidden;
 }
 
 .index-screen .hero{
-  flex:1 1 auto;
   min-height:0;
-  height:auto;
+  height:100%;
   max-height:none;
-  padding-top:0;
-  padding-bottom:0;
+
+  padding-top:clamp(12px, 2.4svh, 32px);
+  padding-bottom:clamp(12px, 2.4svh, 32px);
+
+  overflow:hidden;
 }
 
 .index-screen .brand-strip{
-  flex:0 0 var(--brand-strip-h);
   height:var(--brand-strip-h);
+  min-height:var(--brand-strip-h);
+  max-height:var(--brand-strip-h);
+
+  position:relative;
+  z-index:2;
 }
 
 .index-screen + .work-section{
@@ -190,10 +325,14 @@ img{
 
 .hero{
   display:grid;
-  grid-template-columns:minmax(300px,410px) minmax(760px,1fr);
-  gap:28px;
+  grid-template-columns:minmax(260px,410px) minmax(520px,1fr);
+  gap:clamp(18px, 2vw, 28px);
   align-items:center;
   overflow:hidden;
+}
+
+.hero-copy{
+  min-width:0;
 }
 
 .intro-kicker{
@@ -218,6 +357,14 @@ img{
 
 .hero h1 span:first-child{
   margin-bottom:18px;
+}
+
+.hero-name-logo{
+  display:block;
+  width:min(100%, 410px);
+  max-width:410px;
+  height:auto;
+  margin:0 0 18px;
 }
 
 .hero .lead{
@@ -278,6 +425,7 @@ img{
 /* ============================= */
 
 .hero-cards{
+  min-width:0;
   height:100%;
   min-height:0;
   max-height:none;
@@ -379,13 +527,13 @@ img{
 
 .brand-strip{
   width:100%;
-  height:82px;
+  height:var(--brand-strip-h);
   background:#050505;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  padding:0 32px;
+  padding:0 clamp(18px, 3vw, 32px);
 }
 
 .brand-strip img{
@@ -393,7 +541,7 @@ img{
   width:auto;
   height:auto;
   max-width:100%;
-  max-height:100px;
+  max-height:125%;
   object-fit:contain;
 }
 
@@ -618,23 +766,18 @@ img{
   top:18px;
   left:100%;
   z-index:120;
-
   width:42px;
   height:42px;
   margin-left:auto;
   margin-right:-8px;
   margin-bottom:10px;
-
   border:0;
   background:transparent;
   color:#fff;
-
   font-family:var(--display);
   font-size:42px;
   line-height:1;
-
   cursor:pointer;
-
   transition:
     transform .2s ease,
     opacity .2s ease;
@@ -755,7 +898,7 @@ img{
   width:100%;
   display:block;
   border:0;
-  box-shadow:0 2px 8px rgba(0,0,0,.0);
+  box-shadow:0 2px 8px rgba(0,0,0,0);
 }
 
 .about-copy{
@@ -793,6 +936,16 @@ img{
 .about-copy p{
   font-size:19px;
   max-width:620px;
+}
+
+.about-link{
+  color:var(--accent);
+  text-decoration:none;
+}
+
+.about-link:hover{
+  color:var(--ink);
+  text-decoration:underline;
 }
 
 .brand-logos{
@@ -913,9 +1066,102 @@ img{
 }
 
 /* ============================= */
-/* RESPONSIVE TABLET + MOBILE */
-/* AQUÍ SE DESACTIVA EL ACCORDION */
-/* Y SE OCULTA INSTAGRAM HEADER */
+/* PANTALLAS BAJAS — PORTÁTILES */
+/* ============================= */
+
+@media (max-height:760px) and (min-width:981px){
+  .index-screen{
+    height:calc(100svh - var(--header-real-h));
+    min-height:0;
+  }
+
+  .index-screen .hero{
+    padding-top:clamp(8px, 1.8svh, 18px);
+    padding-bottom:clamp(8px, 1.8svh, 18px);
+  }
+
+  .hero{
+    gap:22px;
+  }
+
+  .hero-name-logo{
+    max-width:330px;
+    margin-bottom:14px;
+  }
+
+  .hero h1{
+    font-size:clamp(58px,7vw,96px);
+  }
+
+  .hero .lead{
+    font-size:23px;
+    line-height:1.04;
+    max-width:430px;
+  }
+
+  .hero-copy > p:not(.lead){
+    font-size:14px;
+    line-height:1.28;
+    max-width:430px;
+  }
+
+  .hero-work-btn{
+    margin-top:12px;
+    padding:9px 15px 8px;
+    font-size:13px;
+  }
+
+  .hero-cards{
+    height:100%;
+    padding:0;
+  }
+
+  .brand-strip{
+    height:var(--brand-strip-h);
+  }
+
+  .brand-strip img{
+    max-height:100%;
+  }
+}
+
+@media (max-height:650px) and (min-width:981px){
+  .index-screen .hero{
+    padding-top:8px;
+    padding-bottom:8px;
+  }
+
+  .hero-name-logo{
+    max-width:285px;
+    margin-bottom:10px;
+  }
+
+  .hero .lead{
+    font-size:20px;
+    max-width:390px;
+  }
+
+  .hero-copy > p:not(.lead){
+    font-size:13px;
+    line-height:1.25;
+    max-width:390px;
+  }
+
+  .hero-cards{
+    height:100%;
+  }
+
+  .brand-strip{
+    height:var(--brand-strip-h);
+  }
+
+  .brand-strip img{
+    max-height:100%;
+  }
+}
+
+/* ============================= */
+/* RESPONSIVE TABLET */
 /* ============================= */
 
 @media (max-width:980px){
@@ -936,6 +1182,22 @@ img{
     gap:22px;
   }
 
+  .index-screen{
+    height:auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    overflow:visible;
+  }
+
+  .index-screen .hero{
+    min-height:auto;
+    height:auto;
+    padding-top:34px;
+    padding-bottom:24px;
+    overflow:visible;
+  }
+
   .hero{
     grid-template-columns:1fr;
     gap:18px;
@@ -945,19 +1207,6 @@ img{
     padding-top:34px;
     padding-bottom:24px;
     overflow:visible;
-  }
-
-  .index-screen{
-    height:auto;
-    min-height:0;
-    overflow:visible;
-  }
-
-  .index-screen .hero{
-    min-height:auto;
-    height:auto;
-    padding-top:34px;
-    padding-bottom:24px;
   }
 
   .hero-cards,
@@ -1004,7 +1253,7 @@ img{
   }
 
   .index-screen .brand-strip{
-    flex-basis:70px;
+    flex-basis:auto;
     height:70px;
   }
 
@@ -1068,6 +1317,15 @@ img{
 
   .logo{
     justify-self:center;
+    width:84px;
+    height:auto;
+  }
+
+  .logo img{
+    width:78px;
+    max-width:78px;
+    height:auto;
+    display:block;
   }
 
   .header-instagram,
@@ -1076,14 +1334,106 @@ img{
   }
 
   .main-nav{
+    width:100%;
+    display:flex;
     flex-wrap:wrap;
     justify-content:center;
     gap:18px;
     margin:6px 0;
   }
 
+  .nav-dropdown{
+    width:100%;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .nav-dropdown::after{
+    display:none;
+  }
+
+  .nav-dropdown-trigger{
+    height:auto;
+  }
+
+  .nav-dropdown-menu{
+    position:static;
+    transform:none;
+    top:auto;
+    left:auto;
+
+    width:100%;
+    min-width:0;
+    margin-top:8px;
+    padding:8px 0;
+
+    border:0;
+    box-shadow:none;
+    background:transparent;
+
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  .nav-dropdown.open .nav-dropdown-menu{
+    display:flex;
+  }
+
+  .nav-dropdown.open .nav-dropdown-trigger::after{
+    transform:translateY(-2px) rotate(180deg);
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  .nav-dropdown-menu a{
+    text-align:center;
+    font-size:12px;
+    padding:4px 8px;
+  }
+
+  .nav-dropdown-menu a:hover{
+    background:transparent;
+    color:var(--accent);
+  }
+
+  .section.hero{
+    padding-top:28px;
+    padding-bottom:24px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    gap:22px;
+    overflow:visible;
+  }
+
   .hero h1{
     font-size:68px;
+  }
+
+  .hero-name-logo{
+    width:min(100%, 330px);
+    max-width:330px;
+    margin:0 0 18px;
+  }
+
+  .hero .lead{
+    font-size:24px;
+    max-width:100%;
+  }
+
+  .hero-copy > p:not(.lead){
+    max-width:100%;
   }
 
   .hero-cards,
@@ -1092,6 +1442,7 @@ img{
     height:auto;
     gap:4px;
     padding:0;
+    overflow:visible;
     transition:none !important;
   }
 
@@ -1104,13 +1455,21 @@ img{
   }
 
   .hero-card{
-    height:360px;
+    height:300px;
   }
 
   .hero-card img,
   .hero-card:hover img{
     transform:scale(1.02) !important;
     filter:saturate(.96) contrast(.99) !important;
+  }
+
+  .index-screen .brand-strip{
+    height:70px;
+  }
+
+  .brand-strip{
+    padding:0 18px;
   }
 
   .licensed-grid,
@@ -1171,8 +1530,10 @@ img{
   }
 
   .modal-close{
-    right:16px;
-    top:16px;
+    top:14px;
+    right:auto;
+    left:auto;
+    margin-right:0;
     font-size:42px;
   }
 
@@ -1215,376 +1576,4 @@ img{
     margin-left:0;
     text-align:center;
   }
-  @media (max-width:640px){
-  .hero-name-logo{
-    width:min(100%, 330px);
-    margin:0 auto 18px;
-  }
-}
-}
-/* ============================= */
-/* FELINA LINK */
-/* ============================= */
-.about-link{
-  color:var(--accent);
-  text-decoration:none;
-}
-
-.about-link:hover{
-  color:var(--ink);
-  text-decoration:underline;
-}
-
-/* ============================= */
-/* FIX HEADER CONSISTENTE */
-/* ============================= */
-
-/* Mantiene siempre el espacio del scrollbar para que el header no se mueva entre páginas */
-html{
-  overflow-y:scroll;
-}
-
-/* Header con la misma caja siempre */
-.nav-wrap{
-  width:100%;
-  max-width:var(--max);
-  margin:0 auto;
-  height:70px;
-  padding:0 clamp(22px,4vw,68px);
-
-  display:grid;
-  grid-template-columns:120px minmax(0,1fr) 70px;
-  align-items:center;
-}
-
-/* Logo izquierda */
-.logo{
-  justify-self:start;
-}
-
-/* Navegación siempre centrada */
-.main-nav{
-  justify-self:center;
-}
-
-/* Instagram derecha siempre en la misma posición */
-.eye-link.header-instagram{
-  justify-self:end;
-  width:70px;
-  height:70px;
-
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-}
-
-.eye-link.header-instagram img{
-  width:34px;
-  height:34px;
-  display:block;
-  object-fit:contain;
-}
-
-/* En tablet y móvil desaparece */
-@media (max-width:980px){
-  .nav-wrap{
-    grid-template-columns:80px 1fr;
-  }
-
-  .header-instagram,
-  .eye-link.header-instagram{
-    display:none !important;
-  }
-}
-
-@media (max-width:640px){
-  .nav-wrap{
-    grid-template-columns:1fr;
-  }
-
-  .header-instagram,
-  .eye-link.header-instagram{
-    display:none !important;
-  }
-}
-/* ============================= */
-/* LOGO GRANDE HERO — SIN TOCAR HEADER */
-/* ============================= */
-
-.hero-name-logo{
-  display:block;
-  width:min(100%, 410px);
-  max-width:410px;
-  height:auto;
-  margin:0 0 18px;
-}
-
-/* ============================= */
-/* HEADER MOBILE — ESTRUCTURA ORIGINAL */
-/* ============================= */
-
-@media (max-width:640px){
-  .nav-wrap{
-    height:auto;
-    grid-template-columns:1fr;
-    padding:12px 18px;
-    text-align:center;
-  }
-
-  .logo{
-    justify-self:center;
-    width:84px;
-    height:auto;
-  }
-
-  .logo img{
-    width:78px;
-    max-width:78px;
-    height:auto;
-    display:block;
-  }
-
-  .main-nav{
-    width:100%;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:18px;
-    margin:6px 0;
-  }
-
-  .header-instagram,
-  .eye-link.header-instagram{
-    display:none !important;
-  }
-
-  .hero-name-logo{
-    width:min(100%, 330px);
-    max-width:330px;
-    margin:0 0 18px;
-  }
-}
-
-
-/* Logo GIF header con blanco en modo multiplicar */
-.site-header .logo{
-  background:transparent;
-  isolation:auto;
-}
-
-.site-header .logo img{
-  mix-blend-mode:multiply;
-  filter:contrast(1.15);
-}
-/* ============================= */
-/* NAV DROPDOWN WORK */
-/* ============================= */
-
-.nav-dropdown{
-  position:relative;
-  display:flex;
-  align-items:center;
-  height:70px;
-}
-
-.nav-dropdown-trigger{
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  height:70px;
-}
-
-.nav-dropdown-menu{
-  position:absolute;
-  top:100%;
-  left:50%;
-  transform:translateX(-50%) translateY(0);
-
-  min-width:210px;
-  padding:12px 0;
-
-  background:#ffffff;
-  border:2px solid var(--ink);
-  box-shadow:4px 4px 0 var(--ink);
-
-  display:flex;
-  flex-direction:column;
-  gap:0;
-
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-
-  transition:
-    opacity .18s ease,
-    visibility .18s ease;
-
-  z-index:80;
-}
-
-/* Zona invisible que une Work con el menú */
-.nav-dropdown-menu::before{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  top:-14px;
-  height:14px;
-  background:transparent;
-}
-
-.nav-dropdown-menu a{
-  display:block;
-  padding:10px 16px 8px;
-
-  font-family:var(--display);
-  font-size:13px;
-  line-height:1;
-  text-align:left;
-  white-space:nowrap;
-
-  color:var(--ink);
-  text-decoration:none;
-  text-transform:uppercase;
-  letter-spacing:.03em;
-}
-
-.nav-dropdown-menu a:hover{
-  background:var(--accent);
-  color:#fff;
-}
-
-.nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown:focus-within .nav-dropdown-menu{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-
-/* Flecha */
-.nav-dropdown-trigger::after{
-  content:"";
-  display:inline-block;
-  width:0;
-  height:0;
-  margin-left:7px;
-  transform:translateY(-2px);
-
-  border-left:4px solid transparent;
-  border-right:4px solid transparent;
-  border-top:5px solid currentColor;
-}
-
-/* MOBILE */
-@media (max-width:640px){
-  .nav-dropdown{
-    width:auto;
-    height:auto;
-    justify-content:center;
-    flex-direction:column;
-  }
-
-  .nav-dropdown-trigger{
-    height:auto;
-  }
-
-  .nav-dropdown-menu{
-    position:static;
-    transform:none;
-
-    width:100%;
-    min-width:0;
-    margin-top:8px;
-    padding:8px 0;
-
-    border:0;
-    box-shadow:none;
-    background:transparent;
-
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-  }
-
-  .nav-dropdown-menu::before{
-    display:none;
-  }
-
-  .nav-dropdown-menu a{
-    text-align:center;
-    font-size:12px;
-    padding:4px 8px;
-  }
-
-  .nav-dropdown-menu a:hover{
-    background:transparent;
-    color:var(--accent);
-  }
-}
-/* ============================= */
-/* FIX ALINEACIÓN NAV DROPDOWN */
-/* ============================= */
-
-.main-nav{
-  align-items:center;
-}
-
-.nav-dropdown{
-  height:auto;
-  display:flex;
-  align-items:center;
-}
-
-.nav-dropdown-trigger{
-  height:auto;
-  display:inline-flex;
-  align-items:center;
-  line-height:1;
-}
-
-/* Mantiene el desplegable conectado sin bajar el texto Work */
-.nav-dropdown::after{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  top:100%;
-  height:18px;
-  background:transparent;
-}
-
-.nav-dropdown-menu{
-  top:calc(100% + 14px);
-}
-/* ============================= */
-/* MOBILE — OCULTAR DROPDOWN WORK */
-/* ============================= */
-
-@media (max-width:640px){
-  .nav-dropdown{
-    width:auto;
-    flex-direction:row;
-  }
-
-  .nav-dropdown-menu{
-    display:none !important;
-  }
-
-  .nav-dropdown-trigger::after{
-    display:none;
-  }
-}
-/* ============================= */
-/* DESKTOP — CERRAR DROPDOWN AL CLIC */
-/* ============================= */
-
-.nav-dropdown.force-close .nav-dropdown-menu{
-  opacity:0 !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
 }
