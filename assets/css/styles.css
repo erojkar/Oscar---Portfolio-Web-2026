@@ -186,7 +186,6 @@ img{
   color:var(--accent);
 }
 
-/* Zona invisible que conecta Work con el menú sin bajar el texto */
 .nav-dropdown::after{
   content:"";
   position:absolute;
@@ -259,7 +258,6 @@ img{
   pointer-events:none !important;
 }
 
-/* Flecha */
 .nav-dropdown-trigger::after{
   content:"";
   display:inline-block;
@@ -1338,14 +1336,17 @@ img{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
+    align-items:center;
     gap:18px;
     margin:6px 0;
   }
 
   .nav-dropdown{
-    width:100%;
-    flex-direction:column;
+    width:auto;
+    flex:0 0 auto;
+    flex-direction:row;
     align-items:center;
+    justify-content:center;
   }
 
   .nav-dropdown::after{
@@ -1354,31 +1355,35 @@ img{
 
   .nav-dropdown-trigger{
     height:auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
   }
 
   .nav-dropdown-menu{
-    position:static;
-    transform:none;
-    top:auto;
-    left:auto;
+    position:absolute;
+    top:calc(100% + 8px);
+    left:50%;
+    transform:translateX(-50%);
 
-    width:100%;
-    min-width:0;
-    margin-top:8px;
-    padding:8px 0;
+    width:max-content;
+    min-width:190px;
+    margin-top:0;
+    padding:10px 0;
 
-    border:0;
-    box-shadow:none;
-    background:transparent;
+    border:2px solid var(--ink);
+    box-shadow:4px 4px 0 var(--ink);
+    background:#fff;
 
     display:none;
     flex-direction:column;
-    align-items:center;
-    gap:8px;
+    align-items:stretch;
+    gap:0;
 
     opacity:1;
     visibility:visible;
     pointer-events:auto;
+    z-index:90;
   }
 
   .nav-dropdown.open .nav-dropdown-menu{
@@ -1390,20 +1395,24 @@ img{
   }
 
   .nav-dropdown:hover .nav-dropdown-menu{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
+    display:none;
+  }
+
+  .nav-dropdown.open:hover .nav-dropdown-menu{
+    display:flex;
   }
 
   .nav-dropdown-menu a{
-    text-align:center;
+    display:block;
+    text-align:left;
     font-size:12px;
-    padding:4px 8px;
+    padding:9px 14px 7px;
+    white-space:nowrap;
   }
 
   .nav-dropdown-menu a:hover{
-    background:transparent;
-    color:var(--accent);
+    background:var(--accent);
+    color:#fff;
   }
 
   .section.hero{
